@@ -124,7 +124,7 @@ module.exports = (app) => {
 
     await octokit.graphql(
       `mutation MyMutation {
-  enablePullRequestAutoMerge(input: {pullRequestId: "${detailedPullRequestData.data.id}", mergeMethod: MERGE}) {
+  enablePullRequestAutoMerge(input: {pullRequestId: "${detailedPullRequestData.data.node_id}", mergeMethod: MERGE}) {
     clientMutationId
   }
 }
