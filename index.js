@@ -91,6 +91,6 @@ const handleReleaseReleased = async (context) => {
  * @param {import('probot').Probot} app
  */
 
-module.exorts = (app) => {
+module.exports = (app) => {
   app.on("release.released", handleReleaseReleased);
 };
