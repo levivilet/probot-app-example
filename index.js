@@ -14,6 +14,8 @@ module.exports = (app) => {
   });
 
   app.on("release.released", (info) => {
+    const tagName = info.payload.release.tag_name;
+    console.log(tagName);
     console.log("release was released" + info.payload.repository.name);
   });
 
