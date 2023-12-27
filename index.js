@@ -13,6 +13,10 @@ module.exports = (app) => {
     return context.octokit.issues.createComment(issueComment);
   });
 
+  app.on("release.released", (info) => {
+    console.log("release was released" + info.payload.repository.name);
+  });
+
   // For more information on building apps:
   // https://probot.github.io/docs/
 
