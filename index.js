@@ -30,11 +30,11 @@ module.exports = (app) => {
     console.log(tagName);
     console.log("release was released" + context.payload.repository.name);
 
-    console.log("git is", typeof context.octokit.git);
+    console.log("git is", typeof context.octokit.rest.git);
     const branchName = `update-version/${tagName}`;
 
     const sha = await getBranchHeadSha(owner, repo);
-    const result = await context.octokit.git.createRef({
+    const result = await context.octokit.rest.git.createRef({
       owner,
       repo,
       ref: `refs/heads/${branchName}`,
