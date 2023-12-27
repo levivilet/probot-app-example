@@ -42,19 +42,13 @@ export default (app) => {
       repo,
       ref: `heads/${baseBranch}`,
     });
-    const newBranchRef = await octokit.rest.git.createRef({
+    await octokit.rest.git.createRef({
       owner,
       repo,
       ref: `refs/heads/${newBranch}`,
       sha: mainBranchRef.data.object.sha,
     });
     console.log("created branch");
-
-    const currentCommit = await octokit.rest.git.getCommit({
-      owner,
-      repo,
-      commit_sha: newBranchRef.data.object.sha,
-    });
 
     const filesJson = await context.octokit.rest.repos.getContent({
       owner,
