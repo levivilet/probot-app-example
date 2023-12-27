@@ -107,21 +107,6 @@ module.exports = (app) => {
       sha: filesJson.data.sha,
     });
 
-    // const newCommit = await octokit.rest.git.createCommit({
-    //   owner,
-    //   repo,
-    //   message: "test commit",
-    //   tree: currentCommit.data.tree.sha,
-    //   parents: [currentCommit.data.sha],
-    // });
-
-    // await octokit.rest.git.updateRef({
-    //   owner,
-    //   repo,
-    //   ref: `heads/${newBranch}`,
-    //   sha: newCommit.data.sha,
-    // });
-
     await octokit.rest.pulls.create({
       owner,
       repo,
