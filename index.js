@@ -114,11 +114,17 @@ module.exports = (app) => {
       base: baseBranch,
       title: `update to version ${tagName}`,
     });
-    const pullRequestId = pullRequestData.data.id;
+    const pullRequestNumber = pullRequestData.data.number;
+
+    const detailedPullRequestData = await octokit.rest.pulls.get({
+      owner,
+      repo,
+      pull_number: pullRequestNumber,
+    });
 
     await octokit.graphql(
       `mutation MyMutation {
-  enablePullRequestAutoMerge(input: {pullRequestId: "${pullRequestId}", mergeMethod: MERGE}) {
+  enablePullRequestAutoMerge(input: {pullRequestId: "${detailedPullRequestData.data.id}", mergeMethod: MERGE}) {
     clientMutationId
   }
 }
