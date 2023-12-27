@@ -4,7 +4,8 @@
   "private": true,
   "description": "A Probot app",
   "author": "levivilet",
-  "license": "ISC",
+  "license": "MIT",
+  "type": "module",
   "homepage": "https://github.com//",
   "keywords": [
     "probot",
@@ -16,7 +17,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "probot": "^12.3.3"
+    "probot": "^13.0.0-beta.16"
   },
   "devDependencies": {
     "jest": "^29.7.0",

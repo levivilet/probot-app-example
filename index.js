@@ -14,7 +14,7 @@ const getNewValue = (value, version) => {
  * This is the main entrypoint to your Probot app
  * @param {import('probot').Probot} app
  */
-module.exports = (app) => {
+export default (app) => {
   // Your code here
   app.log.info("Yay, the app was loaded!");
 
