@@ -45,6 +45,7 @@ module.exports = (app) => {
     // const branchSha = result.data.object.sha;
     const branchSha = await getBranchHeadSha(context, owner, repo, branchName);
 
+    console.log("branch sha", branchSha);
     await context.octokit.rest.git.createCommit({
       message: "test commit",
       owner,
