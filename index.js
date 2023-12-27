@@ -40,6 +40,8 @@ module.exports = (app) => {
       ref: `refs/heads/${branchName}`,
       sha,
     });
+    console.log("created branch");
+
     // const branchSha = result.data.object.sha;
 
     // await context.octokit.rest.git.createCommit({
@@ -55,6 +57,5 @@ module.exports = (app) => {
     //   base: "main",
     //   body: `update to version ${tagName}`,
     // });
-    console.log("created branch");
   });
 };
