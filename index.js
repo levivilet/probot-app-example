@@ -104,6 +104,7 @@ module.exports = (app) => {
       message: "test commit",
       content: filesJsonBase64New,
       branch: newBranch,
+      sha: filesJson.data.sha,
     });
 
     // const newCommit = await octokit.rest.git.createCommit({
