@@ -1,5 +1,3 @@
-import { Context } from "probot";
-
 const getNewValue = (value, version) => {
   return value.map((item) => {
     if (item.name === "b") {
@@ -13,7 +11,7 @@ const getNewValue = (value, version) => {
 };
 
 /**
- * @param {Context<"release">} context
+ * @param {import('probot').Context<"release">} context
  */
 const handleReleaseReleased = async (context) => {
   const { payload, octokit } = context;
@@ -92,6 +90,7 @@ const handleReleaseReleased = async (context) => {
  * This is the main entrypoint to your Probot app
  * @param {import('probot').Probot} app
  */
-export default (app) => {
+
+module.exorts = (app) => {
   app.on("release.released", handleReleaseReleased);
 };
