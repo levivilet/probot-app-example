@@ -1,23 +1,3 @@
-const { Context } = require("probot");
-
-/**
- *
- * @param {Context} ctx
- * @param {*} owner
- * @param {*} repo
- * @param {*} branch
- * @returns
- */
-const getBranchHeadSha = async (ctx, owner, repo, branch) => {
-  const res = await ctx.octokit.rest.git.getRef({
-    owner,
-    repo,
-    ref: `heads/${branch}`,
-  });
-  const ref = res.data.object;
-  return ref.sha;
-};
-
 const getNewValue = (value, version) => {
   return value.map((item) => {
     if (item.name === "b") {
