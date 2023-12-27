@@ -1,5 +1,5 @@
 const getBranchHeadSha = async (ctx, owner, repo) => {
-  const res = await ctx.octokit.git.getRef({
+  const res = await ctx.octokit.rest.git.getRef({
     owner,
     repo,
     ref: `heads/main`,
