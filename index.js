@@ -76,17 +76,10 @@ const handleReleaseReleased = async (context) => {
     base: baseBranch,
     title: `update to version ${tagName}`,
   });
-  const pullRequestNumber = pullRequestData.data.number;
-
-  const detailedPullRequestData = await octokit.rest.pulls.get({
-    owner,
-    repo,
-    pull_number: pullRequestNumber,
-  });
 
   await octokit.graphql(
     `mutation MyMutation {
-  enablePullRequestAutoMerge(input: {pullRequestId: "${detailedPullRequestData.data.node_id}", mergeMethod: SQUASH}) {
+  enablePullRequestAutoMerge(input: {pullRequestId: "${pullRequestData.data.node_id}", mergeMethod: SQUASH}) {
     clientMutationId
   }
 }
