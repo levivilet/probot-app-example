@@ -107,12 +107,23 @@ module.exports = (app) => {
       sha: filesJson.data.sha,
     });
 
-    await octokit.rest.pulls.create({
+    const pullRequestData = await octokit.rest.pulls.create({
       owner,
       repo,
       head: newBranch,
       base: baseBranch,
       title: `update to version ${tagName}`,
     });
+    const pullRequestId = pullRequestData.data.id;
+
+    await octokit.graphql(
+      `mutation MyMutation {
+  enablePullRequestAutoMerge(input: {pullRequestId: "${pullRequestId}", mergeMethod: MERGE}) {
+    clientMutationId
+  }
+}
+  `,
+      {}
+    );
   });
 };
