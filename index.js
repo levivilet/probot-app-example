@@ -23,24 +23,25 @@ module.exports = (app) => {
     return context.octokit.issues.createComment(issueComment);
   });
 
-  app.on("release.released", async (info) => {
-    const tagName = info.payload.release.tag_name;
-    const owner = info.payload.repository.owner.login;
+  app.on("release.released", async (context) => {
+    const tagName = context.payload.release.tag_name;
+    const owner = context.payload.repository.owner.login;
     const repo = "test-repo-a";
     console.log(tagName);
-    console.log("release was released" + info.payload.repository.name);
+    console.log("release was released" + context.payload.repository.name);
 
+    console.log("git is", typeof context.octokit.git);
     const branchName = `update-version/${tagName}`;
 
     const sha = await getBranchHeadSha(owner, repo);
-    const result = await info.octokit.git.createRef({
+    const result = await context.octokit.git.createRef({
       owner,
       repo,
       ref: `refs/heads/${branchName}`,
       sha,
     });
     const branchSha = result.data.object.sha;
-    const { data: pr } = await info.octokit.pulls.create({
+    const { data: pr } = await context.octokit.pulls.create({
       owner,
       repo,
       head: branchName,
