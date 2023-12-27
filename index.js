@@ -40,21 +40,21 @@ module.exports = (app) => {
       ref: `refs/heads/${branchName}`,
       sha,
     });
-    const branchSha = result.data.object.sha;
+    // const branchSha = result.data.object.sha;
 
-    await context.octokit.rest.git.createCommit({
-      message: "test commit",
-      owner,
-      repo,
-      tree: branchSha,
-    });
-    const { data: pr } = await context.octokit.pulls.create({
-      owner,
-      repo,
-      head: branchName,
-      base: "main",
-      body: `update to version ${tagName}`,
-    });
-    console.log("created pr");
+    // await context.octokit.rest.git.createCommit({
+    //   message: "test commit",
+    //   owner,
+    //   repo,
+    //   tree: branchSha,
+    // });
+    // const { data: pr } = await context.octokit.pulls.create({
+    //   owner,
+    //   repo,
+    //   head: branchName,
+    //   base: "main",
+    //   body: `update to version ${tagName}`,
+    // });
+    console.log("created branch");
   });
 };
