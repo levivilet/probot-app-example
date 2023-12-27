@@ -18,6 +18,18 @@ const getBranchHeadSha = async (ctx, owner, repo, branch) => {
   return ref.sha;
 };
 
+const getNewValue = (value, version) => {
+  return value.map((item) => {
+    if (item.name === "b") {
+      return {
+        ...item,
+        version,
+      };
+    }
+    return item;
+  });
+};
+
 /**
  * This is the main entrypoint to your Probot app
  * @param {import('probot').Probot} app
@@ -39,6 +51,7 @@ module.exports = (app) => {
     const owner = payload.repository.owner.login;
     const baseBranch = "main";
     const repo = "test-repo-a";
+    const filesPath = "files.json";
     console.log(tagName);
     console.log("release was released" + payload.repository.name);
 
@@ -63,20 +76,50 @@ module.exports = (app) => {
       commit_sha: newBranchRef.data.object.sha,
     });
 
-    const newCommit = await octokit.rest.git.createCommit({
+    const filesJson = await context.octokit.rest.repos.getContent({
       owner,
       repo,
-      message: "test commit",
-      tree: currentCommit.data.tree.sha,
-      parents: [currentCommit.data.sha],
+      path: filesPath,
     });
 
-    await octokit.rest.git.updateRef({
+    if (!("content" in filesJson.data)) {
+      return;
+    }
+    const filesJsonDecoded = Buffer.from(
+      filesJson.data.content,
+      "base64"
+    ).toString();
+    const filesJsonValue = JSON.parse(filesJsonDecoded);
+    console.log(filesJsonValue);
+    const filesJsonValueNew = getNewValue(filesJsonValue, tagName);
+    const filesJsonStringNew =
+      JSON.stringify(filesJsonValueNew, null, 2) + "\n";
+    const filesJsonBase64New =
+      Buffer.from(filesJsonStringNew).toString("base64");
+
+    await context.octokit.repos.createOrUpdateFileContents({
       owner,
       repo,
-      ref: `heads/${newBranch}`,
-      sha: newCommit.data.sha,
+      path: filesPath,
+      message: "test commit",
+      content: filesJsonBase64New,
+      branch: newBranch,
     });
+
+    // const newCommit = await octokit.rest.git.createCommit({
+    //   owner,
+    //   repo,
+    //   message: "test commit",
+    //   tree: currentCommit.data.tree.sha,
+    //   parents: [currentCommit.data.sha],
+    // });
+
+    // await octokit.rest.git.updateRef({
+    //   owner,
+    //   repo,
+    //   ref: `heads/${newBranch}`,
+    //   sha: newCommit.data.sha,
+    // });
 
     await octokit.rest.pulls.create({
       owner,
