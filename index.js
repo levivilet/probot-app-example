@@ -1,8 +1,8 @@
-const getBranchHeadSha = async (ctx, owner, repo) => {
+const getBranchHeadSha = async (ctx, owner, repo, branch) => {
   const res = await ctx.octokit.rest.git.getRef({
     owner,
     repo,
-    ref: `heads/main`,
+    ref: `heads/${branch}`,
   });
   const ref = res.data.object;
   return ref.sha;
@@ -33,23 +33,24 @@ module.exports = (app) => {
     console.log("git is", typeof context.octokit.rest.git);
     const branchName = `update-version/${tagName}`;
 
-    const sha = await getBranchHeadSha(context, owner, repo);
+    const mainBranchSha = await getBranchHeadSha(context, owner, repo, "main");
     const result = await context.octokit.rest.git.createRef({
       owner,
       repo,
       ref: `refs/heads/${branchName}`,
-      sha,
+      sha: mainBranchSha,
     });
     console.log("created branch");
 
     // const branchSha = result.data.object.sha;
+    const branchSha = await getBranchHeadSha(context, owner, repo, branchName);
 
-    // await context.octokit.rest.git.createCommit({
-    //   message: "test commit",
-    //   owner,
-    //   repo,
-    //   tree: branchSha,
-    // });
+    await context.octokit.rest.git.createCommit({
+      message: "test commit",
+      owner,
+      repo,
+      tree: branchSha,
+    });
     // const { data: pr } = await context.octokit.pulls.create({
     //   owner,
     //   repo,
