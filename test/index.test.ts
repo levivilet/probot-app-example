@@ -1,4 +1,4 @@
-const nock = require("nock");
+import * as nock from "nock";
 const myProbotApp = require("../src/index.js");
 import { Probot, ProbotOctokit } from "probot";
 import * as payload from "./fixtures/issues.opened.json";
