@@ -1,3 +1,9 @@
+/**
+ *
+ * @param {any[]} value
+ * @param {string} version
+ * @returns
+ */
 const getNewValue = (value, version) => {
   return value.map((item) => {
     if (item.name === "b") {
@@ -88,7 +94,6 @@ const handleReleaseReleased = async (context) => {
  * This is the main entrypoint to your Probot app
  * @param {import('probot').Probot} app
  */
-
 module.exports = (app) => {
   app.on("release.released", handleReleaseReleased);
 };
