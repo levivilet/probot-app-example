@@ -78,11 +78,11 @@ const handleReleaseReleased = async (context) => {
 
   await octokit.graphql(
     `mutation MyMutation {
-  enablePullRequestAutoMerge(input: {pullRequestId: "${pullRequestData.data.node_id}", mergeMethod: SQUASH}) {
+  enablePullRequestAutoMerge(input: { pullRequestId: "${pullRequestData.data.node_id}", mergeMethod: SQUASH }) {
     clientMutationId
   }
 }
-  `,
+`,
     {}
   );
 };

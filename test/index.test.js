@@ -26,44 +26,78 @@ beforeEach(() => {
       throttle: { enabled: false },
     }),
   });
-  // Load our app into probot
   probot.load(myProbotApp);
 });
 
 afterEach(() => {
   nock.cleanAll();
   nock.enableNetConnect();
+  probot = undefined;
 });
 
-test.skip("creates a pull request to update versions when a release is created", async () => {
+test("creates a pull request to update versions when a release is created", async () => {
   const mock = nock("https://api.github.com")
-    // Test that we correctly return a test token
-    .post("/app/installations/2/access_tokens")
-    .reply(200, {
-      token: "test",
-      permissions: {
-        issues: "write",
-      },
-    })
     .get("/repos/hiimbex/test-repo-a/git/ref/heads%2Fmain")
     .reply(200, {
       object: {
         sha: "main-sha",
       },
     })
-    .post("/repos/hiimbex/test-repo-a/git/refs")
-    .reply(200, {});
-  // .post("");
-
-  // Test that a comment is posted
-  // .post("/repos/hiimbex/testing-things/issues/1/comments", (body) => {
-  //   expect(body).toMatchObject(issueCreatedBody);
-  //   return true;
-  // })
-  // .reply(200);
+    .post("/repos/hiimbex/test-repo-a/git/refs", (body) => {
+      expect(body).toEqual({
+        ref: "refs/heads/update-version/v2.4.0",
+        sha: "main-sha",
+      });
+      return true;
+    })
+    .reply(200, {})
+    .get("/repos/hiimbex/test-repo-a/contents/files.json")
+    .reply(200, {
+      content: Buffer.from(
+        JSON.stringify([
+          {
+            name: "b",
+            version: "0.0.1",
+          },
+        ])
+      ),
+    })
+    .put("/repos/hiimbex/test-repo-a/contents/files.json", (body) => {
+      expect(body).toEqual({
+        branch: "update-version/v2.4.0",
+        content:
+          "WwogIHsKICAgICJuYW1lIjogImIiLAogICAgInZlcnNpb24iOiAidjIuNC4wIgogIH0KXQo=",
+        message: "test commit",
+      });
+      return true;
+    })
+    .reply(200)
+    .post(`/repos/hiimbex/test-repo-a/pulls`, (body) => {
+      expect(body).toEqual({
+        base: "main",
+        head: "update-version/v2.4.0",
+        title: "update to version v2.4.0",
+      });
+      return true;
+    })
+    .reply(200, {
+      node_id: "test-node-id",
+    })
+    .post("/graphql", (body) => {
+      expect(body).toEqual({
+        query: `mutation MyMutation {
+  enablePullRequestAutoMerge(input: { pullRequestId: \"test-node-id\", mergeMethod: SQUASH }) {
+    clientMutationId
+  }
+}
+`,
+      });
+      return true;
+    })
+    .reply(200);
 
   // Receive a webhook event
   await probot.receive({ name: "release.released", payload });
 
-  expect(mock.pendingMocks()).toStrictEqual([]);
+  expect(mock.pendingMocks()).toEqual([]);
 });
