@@ -1,11 +1,9 @@
 const nock = require("nock");
 const myProbotApp = require("../src/index.js");
-const { Probot, ProbotOctokit } = require("probot");
-const payload = require("./fixtures/issues.opened.json");
+import { Probot, ProbotOctokit } from "probot";
+import * as payload from "./fixtures/issues.opened.json";
 import * as fs from "node:fs";
 import * as path from "node:path";
-
-let x: number = 2;
 
 const privateKey = fs.readFileSync(
   path.join(__dirname, "fixtures/mock-cert.pem"),
