@@ -10,10 +10,7 @@ const privateKey = fs.readFileSync(
   "utf-8"
 );
 
-/**
- * @type {any}
- */
-let probot;
+let probot: Probot | undefined;
 
 beforeEach(() => {
   nock.disableNetConnect();
@@ -97,7 +94,22 @@ test("creates a pull request to update versions when a release is created", asyn
     .reply(200);
 
   // Receive a webhook event
-  await probot.receive({ name: "release.released", payload });
+  await probot.receive({
+    name: "release",
+    payload: {
+      action: "released",
+      release: {
+        tag_name: "v2.4.0",
+      },
+      repository: {
+        name: "testing-things",
+        // @ts-ignore
+        owner: {
+          login: "hiimbex",
+        },
+      },
+    },
+  });
 
   expect(mock.pendingMocks()).toEqual([]);
 });
