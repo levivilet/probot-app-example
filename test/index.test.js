@@ -1,8 +1,6 @@
 const nock = require("nock");
-// Requiring our app implementation
-const myProbotApp = require("..");
+const myProbotApp = require("../src/index.js");
 const { Probot, ProbotOctokit } = require("probot");
-// Requiring our fixtures
 const payload = require("./fixtures/issues.opened.json");
 const issueCreatedBody = { body: "Thanks for opening this issue!" };
 const fs = require("fs");

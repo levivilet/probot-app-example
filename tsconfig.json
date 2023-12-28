@@ -4,7 +4,7 @@
     "checkJs": true,
     "module": "NodeNext",
     "target": "esnext",
-    "types": ["node"],
+    "types": ["node", "jest"],
     "moduleResolution": "NodeNext",
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
