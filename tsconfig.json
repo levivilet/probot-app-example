@@ -2,10 +2,10 @@
   "compilerOptions": {
     "lib": ["esnext"],
     "checkJs": true,
-    "module": "NodeNext",
-    "target": "esnext",
+    "module": "CommonJS",
+    "target": "ESNext",
     "types": ["node", "jest"],
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "node",
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "noEmit": true,
