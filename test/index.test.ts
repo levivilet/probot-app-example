@@ -1,13 +1,6 @@
 import * as nock from "nock";
-import * as fs from "node:fs";
-import * as path from "node:path";
 import { Probot, ProbotOctokit } from "probot";
 import * as myProbotApp from "../src/index.js";
-
-const privateKey = fs.readFileSync(
-  path.join(__dirname, "fixtures/mock-cert.pem"),
-  "utf-8"
-);
 
 let probot: Probot | undefined;
 
@@ -15,7 +8,7 @@ beforeEach(() => {
   nock.disableNetConnect();
   probot = new Probot({
     appId: 123,
-    privateKey,
+    privateKey: "123",
     // disable request throttling and retries for testing
     Octokit: ProbotOctokit.defaults({
       retry: { enabled: false },
