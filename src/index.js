@@ -67,7 +67,7 @@ const handleReleaseReleased = async (context) => {
     owner,
     repo,
     path: filesPath,
-    message: "test commit",
+    message: `update to version ${tagName}`,
     content: filesJsonBase64New,
     branch: newBranch,
     sha: filesJson.data.sha,
