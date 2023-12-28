@@ -48,16 +48,15 @@ const handleReleaseReleased = async (context) => {
   if (!("content" in filesJson.data)) {
     return;
   }
-  const filesJsonDecoded = Buffer.from(
-    filesJson.data.content,
-    "base64"
-  ).toString();
+  const filesJsonBase64 = filesJson.data.content;
+  const filesJsonDecoded = Buffer.from(filesJsonBase64, "base64").toString();
   const filesJsonValue = JSON.parse(filesJsonDecoded);
-  console.log(filesJsonValue);
   const filesJsonValueNew = getNewValue(filesJsonValue, tagName);
   const filesJsonStringNew = JSON.stringify(filesJsonValueNew, null, 2) + "\n";
+  if (filesJsonDecoded === filesJsonStringNew) {
+    return;
+  }
   const filesJsonBase64New = Buffer.from(filesJsonStringNew).toString("base64");
-
   await context.octokit.repos.createOrUpdateFileContents({
     owner,
     repo,
@@ -67,7 +66,6 @@ const handleReleaseReleased = async (context) => {
     branch: newBranch,
     sha: filesJson.data.sha,
   });
-
   const pullRequestData = await octokit.rest.pulls.create({
     owner,
     repo,
@@ -75,7 +73,6 @@ const handleReleaseReleased = async (context) => {
     base: baseBranch,
     title: `update to version ${tagName}`,
   });
-
   await octokit.graphql(
     `mutation MyMutation {
   enablePullRequestAutoMerge(input: { pullRequestId: "${pullRequestData.data.node_id}", mergeMethod: SQUASH }) {
