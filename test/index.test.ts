@@ -56,7 +56,7 @@ test("creates a pull request to update versions when a release is created", asyn
         branch: "update-version/v2.4.0",
         content:
           "WwogIHsKICAgICJuYW1lIjogImIiLAogICAgInZlcnNpb24iOiAidjIuNC4wIgogIH0KXQo=",
-        message: "test commit",
+        message: "update to version v2.4.0",
       });
       return true;
     })
@@ -107,20 +107,6 @@ test("creates a pull request to update versions when a release is created", asyn
 
 test("doesn't create a pull request when the new file content would be the same", async () => {
   const mock = nock("https://api.github.com")
-    .get("/repos/hiimbex/test-repo-a/git/ref/heads%2Fmain")
-    .reply(200, {
-      object: {
-        sha: "main-sha",
-      },
-    })
-    .post("/repos/hiimbex/test-repo-a/git/refs", (body) => {
-      expect(body).toEqual({
-        ref: "refs/heads/update-version/v2.4.0",
-        sha: "main-sha",
-      });
-      return true;
-    })
-    .reply(200, {})
     .get("/repos/hiimbex/test-repo-a/contents/files.json")
     .reply(200, {
       content: Buffer.from(

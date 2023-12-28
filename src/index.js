@@ -31,20 +31,6 @@ const handleReleaseReleased = async (context) => {
 
   const newBranch = `update-version/${tagName}`;
 
-  const mainBranchRef = await octokit.rest.git.getRef({
-    owner,
-    repo,
-    ref: `heads/${baseBranch}`,
-  });
-
-  await octokit.rest.git.createRef({
-    owner,
-    repo,
-    ref: `refs/heads/${newBranch}`,
-    sha: mainBranchRef.data.object.sha,
-  });
-  console.log("created branch");
-
   const filesJson = await context.octokit.rest.repos.getContent({
     owner,
     repo,
@@ -63,6 +49,21 @@ const handleReleaseReleased = async (context) => {
     return;
   }
   const filesJsonBase64New = Buffer.from(filesJsonStringNew).toString("base64");
+
+  const mainBranchRef = await octokit.rest.git.getRef({
+    owner,
+    repo,
+    ref: `heads/${baseBranch}`,
+  });
+
+  await octokit.rest.git.createRef({
+    owner,
+    repo,
+    ref: `refs/heads/${newBranch}`,
+    sha: mainBranchRef.data.object.sha,
+  });
+  console.log("created branch");
+
   await context.octokit.repos.createOrUpdateFileContents({
     owner,
     repo,
