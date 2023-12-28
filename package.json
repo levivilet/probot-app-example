@@ -13,7 +13,8 @@
   ],
   "scripts": {
     "start": "probot run ./src/index.js",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "node --unhandled-rejections=warn --experimental-vm-modules ./node_modules/jest/bin/jest.js --watch"
   },
   "dependencies": {
     "probot": "^12.3.3"

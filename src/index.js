@@ -30,6 +30,7 @@ const handleReleaseReleased = async (context) => {
     repo,
     ref: `heads/${baseBranch}`,
   });
+
   await octokit.rest.git.createRef({
     owner,
     repo,
