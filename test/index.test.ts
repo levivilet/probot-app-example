@@ -2,8 +2,8 @@ const nock = require("nock");
 const myProbotApp = require("../src/index.js");
 const { Probot, ProbotOctokit } = require("probot");
 const payload = require("./fixtures/issues.opened.json");
-const fs = require("fs");
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 
 let x: number = 2;
 
