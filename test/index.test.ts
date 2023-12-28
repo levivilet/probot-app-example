@@ -102,6 +102,5 @@ test("creates a pull request to update versions when a release is created", asyn
       },
     },
   });
-
   expect(mock.pendingMocks()).toEqual([]);
 });
