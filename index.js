@@ -13,6 +13,9 @@ export default (app, { getRouter }) => {
   // Your code here
   app.log.info("Yay, the app was loaded!");
 
+  app.on("release.released", () => {
+    console.log("release released");
+  });
   app.on("issues.opened", async (context) => {
     const issueComment = context.issue({
       body: "Thanks for opening this issue!",
