@@ -2,7 +2,14 @@
  * This is the main entrypoint to your Probot app
  * @param {import('probot').Probot} app
  */
-export default (app) => {
+export default (app, { getRouter }) => {
+  const router = getRouter("/my-app");
+
+  // Add a new route
+  router.get("/hello-world", (req, res) => {
+    res.send("Hello World");
+  });
+  // console.log({ getRouter });
   // Your code here
   app.log.info("Yay, the app was loaded!");
 
