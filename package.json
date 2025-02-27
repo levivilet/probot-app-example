@@ -16,11 +16,11 @@
     "test": "node --test"
   },
   "dependencies": {
-    "probot": "^13.0.1"
+    "probot": "^13.4.3"
   },
   "devDependencies": {
-    "nock": "^14.0.0-beta.5",
-    "smee-client": "^2.0.0"
+    "nock": "^14.0.1",
+    "smee-client": "^3.0.0"
   },
   "engines": {
     "node": ">= 18"
